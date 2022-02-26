@@ -81,6 +81,4 @@ test:
 #
 production:
   <<: *default
-  database: hot_diggity_production
-  username: hot_diggity
-  password: <%= ENV["HOT_DIGGITY_DATABASE_PASSWORD"] %>
+  url: <%= ENV["DATABASE_URL"] %>
