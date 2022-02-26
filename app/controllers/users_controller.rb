@@ -5,7 +5,7 @@ class UsersController < ApplicationController
 
   # REGISTER
   def create
-    user = User.new(user_params)
+    user = User.new(params.permit(:email, :password))
 
     if user.save
       token = encode_token({ user_id: user.id })
@@ -17,9 +17,9 @@ class UsersController < ApplicationController
 
   # LOGGING IN
   def login
-    user = User.find_by(email: user_params[:email])
+    user = User.find_by(email: params.require(:email))
 
-    if user&.authenticate(user_params[:password])
+    if user&.authenticate(params.require(:password))
       token = encode_token({ user_id: user.id })
       render_success({ user:, token: })
     else
@@ -29,11 +29,5 @@ class UsersController < ApplicationController
 
   def auto_login
     render json: @user
-  end
-
-  private
-
-  def user_params
-    params.permit(:email, :password)
   end
 end
